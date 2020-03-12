@@ -2042,6 +2042,7 @@ const double ValidatorBoundsHit::EPS = 1E-12;
 class Validator {
 private:
     std::string _testset;
+    bool _groupSet;
     std::string _group;
     std::string _testOverviewLogFileName;
     std::map<std::string, ValidatorBoundsHit> _boundsHitByVariableName;
@@ -2063,7 +2064,7 @@ private:
     }
 
 public:
-    Validator() : _testset("tests"), _group() {
+    Validator() : _testset("tests"), _group(), _groupSet(false){
     }
 
     std::string testset() const {
@@ -2071,6 +2072,9 @@ public:
     }
 
     std::string group() const {
+        if (!_groupSet) {
+            __testlib_fail(std::string("--group should be set on command line when using validator.group() method."));
+        }
         return _group;
     }
 
@@ -2083,6 +2087,7 @@ public:
     }
 
     void setGroup(const char *const group) {
+        _groupSet = true;
         _group = group;
     }
 
